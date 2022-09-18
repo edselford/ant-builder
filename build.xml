@@ -1,0 +1,29 @@
+<project basedir="." default="dist" name="AntBuilder">
+  <description>Generate build.xml</description>
+  <property location="src" name="src"></property>
+  <property location="out" name="out"></property>
+  <property location="dist" name="dist"></property>
+  <target name="init">
+    <tstamp></tstamp>
+    <mkdir dir="${out}"></mkdir>
+    <mkdir dir="${src}/antbuilder"></mkdir>
+    <touch file="${src}/antbuilder/Main.java"/>
+  </target>
+  <target depends="init" description="compile the source" name="compile">
+    <javac destdir="${out}" srcdir="${src}"></javac>
+  </target>
+  <target depends="compile" name="dist">
+    <mkdir dir="${dist}/lib"></mkdir>
+    <jar destfile="${dist}/lib/AntBuilder-${DSTAMP}.jar">
+      <fileset dir="${out}"></fileset>
+      <!-- <zipfileset includes="*/**.class" src="lib/main/some.jar"/> -->
+      <manifest>
+        <attribute name="Main-Class" value="antbuilder.Main"></attribute>
+      </manifest>
+    </jar>
+  </target>
+  <target description="clean up" name="clean">
+    <delete dir="${out}"></delete>
+    <delete dir="${dist}"></delete>
+  </target>
+</project>
