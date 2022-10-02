@@ -9,14 +9,13 @@
     <mkdir dir="${src}/antbuilder"></mkdir>
     <touch file="${src}/antbuilder/Main.java"/>
   </target>
-  <target depends="init" description="compile the source" name="compile">
+  <target description="compile the source" name="compile">
     <javac destdir="${out}" srcdir="${src}"></javac>
   </target>
   <target depends="compile" name="dist">
     <mkdir dir="${dist}/lib"></mkdir>
-    <jar destfile="${dist}/lib/AntBuilder-${DSTAMP}.jar">
+    <jar destfile="${dist}/lib/AntBuilder.jar">
       <fileset dir="${out}"></fileset>
-      <!-- <zipfileset includes="*/**.class" src="lib/main/some.jar"/> -->
       <manifest>
         <attribute name="Main-Class" value="antbuilder.Main"></attribute>
       </manifest>

@@ -7,10 +7,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Generator {
-  public static void outputFile(String[] prt_data) throws IOException {
+  public static void outputFile(String[] prt_data, boolean mk_main) throws IOException {
     FileOutputStream build_xml = new FileOutputStream("build.xml");
 
-    String config = getConfig(prt_data[0], prt_data[1]);
+    String config = getConfig(prt_data[0], prt_data[1], mk_main);
 
     for (int i = 0; i < config.length(); i++) {
       build_xml.write(config.charAt(i));
@@ -42,7 +42,7 @@ public class Generator {
     System.out.println("Intialize Ant Project...\t[OK]");
   }
 
-  private static String getConfig(String prt_name, String prt_desc) {
+  private static String getConfig(String prt_name, String prt_desc, boolean mk_main) {
     return String.format("""
 <project basedir="." default="dist" name="%1$s">
   <description>%2$s</description>
@@ -52,17 +52,26 @@ public class Generator {
   <target name="init">
     <tstamp></tstamp>
     <mkdir dir="${out}"></mkdir>
+"""
++ ((mk_main) ?
+"""
     <mkdir dir="${src}/%3$s"></mkdir>
     <touch file="${src}/%3$s/Main.java"/>
+"""
+:
+"""
+    <mkdir dir="${src}"></mkdir>
+""")
++
+"""
   </target>
-  <target depends="init" description="compile the source" name="compile">
+  <target description="compile the source" name="compile">
     <javac destdir="${out}" srcdir="${src}"></javac>
   </target>
   <target depends="compile" name="dist">
     <mkdir dir="${dist}/lib"></mkdir>
-    <jar destfile="${dist}/lib/%1$s-${DSTAMP}.jar">
+    <jar destfile="${dist}/lib/%1$s.jar">
       <fileset dir="${out}"></fileset>
-      <!-- <zipfileset includes="*/**.class" src="lib/main/some.jar"/> -->
       <manifest>
         <attribute name="Main-Class" value="%3$s.Main"></attribute>
       </manifest>

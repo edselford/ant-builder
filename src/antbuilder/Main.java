@@ -28,10 +28,17 @@ public class Main {
     }
 
     System.out.println(Arrays.toString(basic_input));
-    Generator.outputFile(basic_input);
-    System.out.println("Do you wan't to initialize Ant Project? (y/N) : ");
-    String res = inp.next();
-    if (res.equals("y") || res.equals("Y")) Generator.runInit();
+
+    System.out.print("Create Main Class (Y/n) : ");
+    String mk_main = inp.next();
+    boolean cr_main = true;
+
+    if (mk_main.equals("n") || mk_main.equals("N")) cr_main = false;
+
+    Generator.outputFile(basic_input, cr_main);
+    System.out.print("Initialize Ant Project? (y/N) : ");
+    String r_init = inp.next();
+    if (r_init.equals("y") || r_init.equals("Y")) Generator.runInit();
   }
 
   private static final String[] getInput() {
